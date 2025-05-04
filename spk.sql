@@ -81,9 +81,12 @@ CREATE TABLE `perhitungan` (
 --
 
 CREATE TABLE `users` (
-  `user_id` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `username` varchar(55) NOT NULL,
   `email` varchar(55) NOT NULL,
-  `password` varchar(55) NOT NULL
+  `password` varchar(55) NOT NULL,
+  `role` enum('Admin, Mahasiswa') NOT NULL
+  
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
