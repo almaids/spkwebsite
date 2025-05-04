@@ -19,8 +19,10 @@
                 <span>Dashboard</span>
             </li>
             <li class="sidebar-menu-item">
-                <i class="fas fa-users"></i>
-                <span>Data Mahasiswa</span>
+                <a href="mahasiswa.php">
+                    <i class="fas fa-users"></i>
+                    <span>Data Mahasiswa</span>
+                </a>
             </li>
             <li class="sidebar-menu-item">
                 <i class="fas fa-award"></i>

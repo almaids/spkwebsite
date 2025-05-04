@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
             // Simpan data ke database
-            $sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+            $sql = "INSERT INTO users (nama, email, password, role) VALUES (?, ?, ?, 'mahasiswa')";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("sss", $nama, $email, $hashed_password);
 

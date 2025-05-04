@@ -16,7 +16,7 @@
         <ul>
             <li><a href="#">Beranda</a></li>
             <li><a href="formulir.php">Formulir</a></li>
-            <li><a href="profile.php">Profile</a></li>
+            <li><a href="edit_profile.php">Profile</a></li>
         </ul>
     </nav>
     
