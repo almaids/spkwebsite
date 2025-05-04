@@ -6,18 +6,11 @@
     <title>Portal Pendaftaran Beasiswa</title>
     <style>
         :root {
-            /* Warna yang disesuaikan dengan login dan registrasi */
-            --blueQueen: rgb(69, 105, 144);
-            --redFire: rgb(244, 91, 105);
-            --greenSeaweed: rgb(2, 128, 144);
-            --whiteSoft: rgb(250, 250, 250);
-            
-            /* Alias untuk kemudahan penggunaan */
-            --primary: var(--blueQueen);
-            --secondary: var(--greenSeaweed);
-            --accent: var(--redFire);
+            --primary: #3498db;
+            --secondary: #2ecc71;
             --dark: #2c3e50;
-            --light: var(--whiteSoft);
+            --light: #ecf0f1;
+            --accent: #f39c12;
         }
         
         * {
@@ -34,7 +27,7 @@
         }
         
         header {
-            background: linear-gradient(135deg, var(--redFire), var(--blueQueen));
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             text-align: center;
             padding: 2rem 1rem;
@@ -75,8 +68,8 @@
         }
         
         nav a:hover {
-            color: var(--blueQueen);
-            background-color: rgba(69, 105, 144, 0.1);
+            color: var(--primary);
+            background-color: rgba(52, 152, 219, 0.1);
         }
         
         .container {
@@ -99,7 +92,7 @@
         .hero h2 {
             font-size: 2rem;
             margin-bottom: 1rem;
-            color: var(--blueQueen);
+            color: var(--dark);
         }
         
         .hero p {
@@ -121,20 +114,20 @@
         
         .cta-button {
             display: inline-block;
-            background-color: var(--redFire);
+            background-color: var(--accent);
             color: white;
             padding: 0.8rem 2rem;
             border-radius: 50px;
             text-decoration: none;
             font-weight: bold;
             transition: all 0.3s;
-            box-shadow: 0 4px 6px rgba(244, 91, 105, 0.3);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         
         .cta-button:hover {
-            background-color: rgb(229, 76, 90);
+            background-color: #e67e22;
             transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(244, 91, 105, 0.4);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         }
         
         .features {
@@ -159,13 +152,12 @@
         .feature-icon {
             font-size: 2.5rem;
             margin-bottom: 1rem;
-            color: var(--blueQueen);
+            color: var(--primary);
         }
         
         .feature-card h3 {
             margin-bottom: 1rem;
             font-size: 1.3rem;
-            color: var(--greenSeaweed);
         }
         
         .steps {
@@ -180,7 +172,7 @@
             text-align: center;
             margin-bottom: 2rem;
             font-size: 1.8rem;
-            color: var(--blueQueen);
+            color: var(--dark);
         }
         
         .step-list {
@@ -202,7 +194,7 @@
             display: inline-block;
             width: 40px;
             height: 40px;
-            background-color: var(--redFire);
+            background-color: var(--primary);
             color: white;
             border-radius: 50%;
             text-align: center;
@@ -214,7 +206,6 @@
         .step-item h3 {
             margin-bottom: 0.5rem;
             font-size: 1.2rem;
-            color: var(--greenSeaweed);
         }
         
         .step-item p {
@@ -230,7 +221,7 @@
             text-align: center;
             margin-bottom: 2rem;
             font-size: 1.8rem;
-            color: var(--blueQueen);
+            color: var(--dark);
         }
         
         .testimonial-grid {
@@ -260,14 +251,13 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background-color: var(--greenSeaweed);
+            background-color: var(--primary);
             margin-right: 1rem;
         }
         
         .author-details h4 {
             font-size: 1rem;
             margin-bottom: 0.2rem;
-            color: var(--blueQueen);
         }
         
         .author-details p {
@@ -288,7 +278,7 @@
             text-align: center;
             margin-bottom: 2rem;
             font-size: 1.8rem;
-            color: var(--blueQueen);
+            color: var(--dark);
         }
         
         .faq-item {
@@ -300,7 +290,7 @@
         .faq-item h3 {
             margin-bottom: 0.8rem;
             font-size: 1.2rem;
-            color: var(--greenSeaweed);
+            color: var(--primary);
         }
         
         .faq-item p {
@@ -308,7 +298,7 @@
         }
         
         footer {
-            background: linear-gradient(135deg, var(--blueQueen), var(--greenSeaweed));
+            background-color: var(--dark);
             color: white;
             padding: 3rem 1rem;
             text-align: center;
@@ -338,7 +328,7 @@
         }
         
         .footer-section a {
-            color: rgba(250, 250, 250, 0.8);
+            color: #bdc3c7;
             text-decoration: none;
             transition: color 0.3s;
         }
@@ -394,7 +384,6 @@
             <li><a href="#">Persyaratan</a></li>
             <li><a href="#">FAQ</a></li>
             <li><a href="#">Kontak</a></li>
-            <li><a href="login.php">Login</a></li>
         </ul>
     </nav>
     
@@ -523,8 +512,8 @@
                     <li><a href="#">Beranda</a></li>
                     <li><a href="#">Jenis Beasiswa</a></li>
                     <li><a href="#">Persyaratan</a></li>
-                    <li><a href="login.php">Login</a></li>
-                    <li><a href="registrasi.php">Daftar</a></li>
+                    <li><a href="#">Pendaftaran</a></li>
+                    <li><a href="#">Kontak</a></li>
                 </ul>
             </div>
             <div class="footer-section">
