@@ -49,45 +49,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     
-    <style>
-        .login-link {
-            text-align: center;
-            margin-top: 15px;
-            opacity: 0;
-            animation: fadeIn 0.5s 1s forwards;
-        }
-        
-        .login-link a {
-            color: var(--blueQueen);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        
-        .login-link a:hover {
-            color: var(--redFire);
-        }
-        
-        .success-message {
-            background-color: rgba(46, 204, 113, 0.1);
-            color: #2ecc71;
-            padding: 10px 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            text-align: center;
-            font-weight: 500;
-            box-shadow: 0 2px 5px rgba(46, 204, 113, 0.2);
-            animation: fadeIn 0.5s ease-in-out;
-            border-left: 4px solid #2ecc71;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-    </style>
 </head>
 <body>
     <div class="login-container">

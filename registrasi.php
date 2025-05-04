@@ -30,15 +30,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
             // Simpan data ke database
-            $sql = "INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, 'mahasiswa')";
+            $sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("sss", $nama, $email, $hashed_password);
 
             if ($stmt->execute()) {
-                $success = "Registrasi berhasil. Anda akan dialihkan ke halaman login dalam 2 detik.";
+                $success = "Registrasi berhasil. Silakan login.";
                 $nama = $email = $password = '';
-                // Redirect setelah 2 detik
-                header("Refresh: 2; url=login.php?registered=success");
             } else {
                 $error = "Terjadi kesalahan saat menyimpan data.";
             }
@@ -53,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html>
 <head>
     <title>Registrasi</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <div class="login-container">
@@ -84,8 +82,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <button type="submit">Daftar</button>
 
         <div class="login-link">
-            Sudah punya akun? <a href="login.php">Masuk disini</a>
-        </div>
+                Sudah punya akun? <a href="login.php">Masuk disini</a>
+            </div>
     </form>
 </div>
 </body>
