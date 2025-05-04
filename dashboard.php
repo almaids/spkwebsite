@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPK Rekomendasi Beasiswa</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Asap:wght@400;500;600&display=swap');
+        
+        /* Variables */
+        :root {
+            --greenSeaweed: rgb(2, 128, 144);
+            --blueQueen: rgb(69, 105, 144);
+            --redFire: rgb(244, 91, 105);
+            --whiteSoft: rgb(250, 250, 250);
+            
+            /* Update dashboard colors to match index.php */
+            --primary: var(--blueQueen);
+            --primary-light: var(--greenSeaweed);
+            --secondary: rgb(49, 85, 124); /* Darker version of blueQueen */
+            --success: var(--greenSeaweed);
+            --warning: var(--redFire);
+            --info: var(--greenSeaweed);
+            --light: var(--whiteSoft);
+            --dark: #212529;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --sidebar-width: 250px;
+            --header-height: 60px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Asap', sans-serif;
+            background-color: #f5f5f9;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, var(--blueQueen) 0%, var(--greenSeaweed) 100%);
+            color: white;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            height: var(--header-height);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+            list-style: none;
+        }
+        
+        .sidebar-menu-item {
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .sidebar-menu-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-menu-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-right: 4px solid white;
+        }
+        
+        .sidebar-menu-item i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+        
+        /* Main content */
+        .main {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+        
+        .header {
+            height: var(--header-height);
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-menu img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        /* Cards */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-card {
+            display: flex;
+            align-items: center;
+        }
+        
+        .stat-card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.8rem;
+        }
+        
+        .stat-card-info h4 {
+            font-size: 1.6rem;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .bg-primary {
+            background-color: rgba(69, 105, 144, 0.1);
+            color: var(--primary);
+        }
+        
+        .bg-success {
+            background-color: rgba(2, 128, 144, 0.1);
+            color: var(--success);
+        }
+        
+        .bg-warning {
+            background-color: rgba(244, 91, 105, 0.1);
+            color: var(--warning);
+        }
+        
+        .bg-info {
+            background-color: rgba(2, 128, 144, 0.1);
+            color: var(--info);
+        }
+        
+        /* Tables */
+        .table-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow-x: auto;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .table th, .table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .table tbody tr:hover {
+            background-color: rgba(69, 105, 144, 0.05);
+        }
+        
+        .badge {
+            padding: 5px 10px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .badge-success {
+            background-color: rgba(2, 128, 144, 0.1);
+            color: var(--success);
+        }
+        
+        .badge-warning {
+            background-color: rgba(244, 91, 105, 0.1);
+            color: var(--warning);
+        }
+        
+        .badge-primary {
+            background-color: rgba(69, 105, 144, 0.1);
+            color: var(--primary);
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--redFire);
+            color: white;
+            box-shadow: 0 5px 15px rgba(244, 91, 105, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background-color: rgb(229, 76, 90);
+            box-shadow: 0 7px 20px rgba(244, 91, 105, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+        
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.85rem;
+        }
+        
+        /* Section headers */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--blueQueen);
+        }
+        
+        /* Charts container */
+        .charts-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .chart-title {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: var(--blueQueen);
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main {
+                margin-left: 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .dashboard-cards {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            }
+        }
+        
+        /* Chart placeholders */
+        .chart-placeholder {
+            width: 100%;
+            height: 300px;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            color: var(--gray);
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">SPK Beasiswa</div>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="sidebar-menu-item active">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </li>
+            <li class="sidebar-menu-item">
+                <i class="fas fa-users"></i>
+                <span>Data Mahasiswa</span>
+            </li>
+            <li class="sidebar-menu-item">
+                <i class="fas fa-award"></i>
+                <span>Data Beasiswa</span>
+            </li>
+            <li class="sidebar-menu-item">
+                <i class="fas fa-chart-bar"></i>
+                <span>Kriteria Penilaian</span>
+            </li>
+            <li class="sidebar-menu-item">
+                <i class="fas fa-calculator"></i>
+                <span>Perhitungan SPK</span>
+            </li>
+            <li class="sidebar-menu-item">
+                <i class="fas fa-file-alt"></i>
+                <span>Laporan</span>
+            </li>
+            <li class="sidebar-menu-item">
+                <i class="fas fa-cog"></i>
+                <span>Pengaturan</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+        <!-- Header -->
+        <div class="header">
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="user-menu">
+                <img src="/api/placeholder/40/40" alt="User Avatar">
+                <span>Admin</span>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <div class="section-header">
+                <h1 class="section-title">Dashboard</h1>
+                <button class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Input Data Baru
+                </button>
+            </div>
+
+            <!-- Stat Cards -->
+            <div class="dashboard-cards">
+                <div class="card stat-card">
+                    <div class="stat-card-icon bg-primary">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-card-info">
+                        <h4>248</h4>
+                        <p>Total Mahasiswa</p>
+                    </div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-card-icon bg-success">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <div class="stat-card-info">
+                        <h4>15</h4>
+                        <p>Program Beasiswa</p>
+                    </div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-card-icon bg-warning">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div class="stat-card-info">
+                        <h4>87</h4>
+                        <p>Penerima Beasiswa</p>
+                    </div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-card-icon bg-info">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-card-info">
+                        <h4>3</h4>
+                        <p>Beasiswa Aktif</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="section-header">
+                <h2 class="section-title">Statistik</h2>
+            </div>
+            <div class="charts-container">
+                <div class="chart-card">
+                    <h3 class="chart-title">Distribusi Penerima Beasiswa</h3>
+                    <div class="chart-placeholder">
+                        <div>Grafik Distribusi Penerima Beasiswa per Fakultas</div>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3 class="chart-title">Perbandingan Kriteria</h3>
+                    <div class="chart-placeholder">
+                        <div>Grafik Perbandingan Bobot Kriteria</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Applications Table -->
+            <div class="section-header">
+                <h2 class="section-title">Pendaftar Terbaru</h2>
+                <button class="btn btn-primary btn-sm">
+                    <i class="fas fa-eye"></i> Lihat Semua
+                </button>
+            </div>
+            <div class="table-container">
+        
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+        
+        // Active menu item
+        document.querySelectorAll('.sidebar-menu-item').forEach(function(item) {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.sidebar-menu-item').forEach(function(i) {
+                    i.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
