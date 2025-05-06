@@ -106,6 +106,7 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'incomplete_profile') {
         <div class="alert alert-danger" role="alert">
             <?php echo $error_message; ?>
         </div>
+        <?php endif; ?>
             <h1>Profil Mahasiswa</h1>
         </div>
 

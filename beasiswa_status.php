@@ -266,7 +266,7 @@ function getStatusBadge($status) {
         </div>
         
         <div class="button-container">
-            <a href="dashboard.php" class="btn secondary">Kembali ke Dashboard</a>
+            <a href="homepage.php" class="btn secondary">Kembali ke Home</a>
             <?php if ($aplikasi['status_dokumen'] != 'ditolak' && $aplikasi['status_keputusan'] != 'diterima'): ?>
             <a href="cetak_bukti.php?app_id=<?php echo $appId; ?>" class="btn primary" target="_blank">Cetak Bukti Pendaftaran</a>
             <?php endif; ?>
