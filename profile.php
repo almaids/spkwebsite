@@ -14,10 +14,17 @@ require_once 'config.php';
 // Get logged in user ID
 $user_id = $_SESSION['user_id'];
 
+// Get user data
+$user_query = "SELECT * FROM users WHERE id_user = ?";
+$user_stmt = $conn->prepare($user_query);
+$user_stmt->bind_param("i", $user_id);
+$user_stmt->execute();
+$user_result = $user_stmt->get_result();
+$user = $user_result->fetch_assoc();
+
 // Get student data that is connected to the logged in user
-$query = "SELECT m.*, u.nama, u.email, u.role, p.nama_prodi, p.jenjang, p.kode_prodi
+$query = "SELECT m.*, p.nama_prodi, p.jenjang, p.kode_prodi
           FROM mahasiswa m 
-          JOIN users u ON m.user_id = u.id_user 
           LEFT JOIN prodi p ON m.id_prodi = p.id_prodi
           WHERE m.user_id = ?";
 
@@ -28,13 +35,30 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     $student = $result->fetch_assoc();
+    $has_student_data = true;
 } else {
     // If no student record found for this user
-    $student = null;
+    $student = [
+        'nim' => '',
+        'semester' => '',
+        'created_at' => $user['created_at'] ?? date('Y-m-d H:i:s'),
+        'nama_prodi' => '',
+        'jenjang' => '',
+        'kode_prodi' => ''
+    ];
+    $has_student_data = false;
 }
 
 $conn->close();
+
+// Add this to handle the incomplete profile message from formulir.php
+if (isset($_GET['msg']) && $_GET['msg'] == 'incomplete_profile') {
+    $error_message = "Anda harus melengkapi data profil terlebih dahulu sebelum mendaftar beasiswa.";
+} else {
+    $error_message = "";
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -68,35 +92,54 @@ $conn->close();
             font-size: 50px;
             color: #6c757d;
         }
+        .empty-data {
+            color: #6c757d;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="profile-header text-center">
+            <!-- Add this in profile.php inside the container div, right after profile-header -->
+        <?php if (!empty($error_message)): ?>
+        <div class="alert alert-danger" role="alert">
+            <?php echo $error_message; ?>
+        </div>
             <h1>Profil Mahasiswa</h1>
         </div>
 
-        <?php if ($student): ?>
         <div class="row">
             <div class="col-lg-4">
                 <div class="profile-info text-center">
                     <div class="profile-pic">
-                        <?php echo strtoupper(substr($student['nama'], 0, 1)); ?>
+                        <?php echo strtoupper(substr($user['nama'], 0, 1)); ?>
                     </div>
-                    <h3><?php echo htmlspecialchars($student['nama']); ?></h3>
-                    <p class="text-muted"><?php echo htmlspecialchars($student['email']); ?></p>
+                    <h3><?php echo htmlspecialchars($user['nama']); ?></h3>
+                    <p class="text-muted"><?php echo htmlspecialchars($user['email']); ?></p>
                 </div>
             </div>
             <div class="col-lg-8">
                 <div class="profile-info">
                     <h3>Informasi Akademik</h3>
+                    <?php if (!$has_student_data): ?>
+                    <div class="alert alert-info mt-3">
+                        Data akademik belum lengkap. Silakan lengkapi data Anda.
+                    </div>
+                    <?php endif; ?>
                     <hr>
                     <div class="row mb-3">
                         <div class="col-sm-3">
                             <strong>NIM:</strong>
                         </div>
                         <div class="col-sm-9">
-                            <?php echo htmlspecialchars($student['nim']); ?>
+                            <?php 
+                                if (!empty($student['nim'])) {
+                                    echo htmlspecialchars($student['nim']);
+                                } else {
+                                    echo '<span class="empty-data">Belum diisi</span>';
+                                }
+                            ?>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -104,8 +147,8 @@ $conn->close();
                             <strong>Role:</strong>
                         </div>
                         <div class="col-sm-9">
-                            <span class="badge bg-<?php echo ($student['role'] == 'admin') ? 'danger' : 'primary'; ?>">
-                                <?php echo ucfirst(htmlspecialchars($student['role'])); ?>
+                            <span class="badge bg-<?php echo ($user['role'] == 'admin') ? 'danger' : 'primary'; ?>">
+                                <?php echo ucfirst(htmlspecialchars($user['role'])); ?>
                             </span>
                         </div>
                     </div>
@@ -124,7 +167,7 @@ $conn->close();
                                         echo " - ".htmlspecialchars($student['kode_prodi']);
                                     }
                                 } else {
-                                    echo "<em>Belum diisi</em>";
+                                    echo '<span class="empty-data">Belum diisi</span>';
                                 }
                             ?>
                         </div>
@@ -134,7 +177,13 @@ $conn->close();
                             <strong>Semester:</strong>
                         </div>
                         <div class="col-sm-9">
-                            <?php echo htmlspecialchars($student['semester']); ?>
+                            <?php 
+                                if (!empty($student['semester'])) {
+                                    echo htmlspecialchars($student['semester']);
+                                } else {
+                                    echo '<span class="empty-data">Belum diisi</span>';
+                                }
+                            ?>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -142,7 +191,7 @@ $conn->close();
                             <strong>Terdaftar Sejak:</strong>
                         </div>
                         <div class="col-sm-9">
-                            <?php echo date('d F Y', strtotime($student['created_at'])); ?>
+                            <?php echo date('d F Y', strtotime($user['created_at'])); ?>
                         </div>
                     </div>
                     
@@ -153,36 +202,6 @@ $conn->close();
                 </div>
             </div>
         </div>
-        <?php else: ?>
-        <div class="alert alert-warning">
-            <h4>Profil mahasiswa tidak ditemukan</h4>
-            <p>Anda belum memiliki profil mahasiswa. Silakan hubungi administrator untuk mendaftarkan data mahasiswa Anda.</p>
-            <?php
-            // Menampilkan data user meskipun belum ada data mahasiswa
-            $user_id = $_SESSION['user_id'];
-            $user_query = "SELECT * FROM users WHERE id_user = ?";
-            $user_stmt = $conn->prepare($user_query);
-            $user_stmt->bind_param("i", $user_id);
-            $user_stmt->execute();
-            $user_result = $user_stmt->get_result();
-            
-            if ($user_result->num_rows > 0) {
-                $user = $user_result->fetch_assoc();
-            ?>
-            <div class="profile-info mt-4">
-                <h5>Data Pengguna</h5>
-                <p><strong>Nama:</strong> <?php echo htmlspecialchars($user['nama']); ?></p>
-                <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
-                <p><strong>Role:</strong> 
-                    <span class="badge bg-<?php echo ($user['role'] == 'admin') ? 'danger' : 'primary'; ?>">
-                        <?php echo ucfirst($user['role']); ?>
-                    </span>
-                </p>
-                <p><strong>Terdaftar sejak:</strong> <?php echo date('d F Y', strtotime($user['created_at'])); ?></p>
-            </div>
-            <?php } ?>
-        </div>
-        <?php endif; ?>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

@@ -16,7 +16,7 @@
         <ul>
             <li><a href="#">Beranda</a></li>
             <li><a href="formulir.php">Formulir</a></li>
-            <li><a href="edit_profile.php">Profile</a></li>
+            <li><a href="profile.php">Profile</a></li>
         </ul>
     </nav>
     
@@ -157,13 +157,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <div class="social-icons">
-                <a href="#">📱</a>
-                <a href="#">📘</a>
-                <a href="#">📷</a>
-                <a href="#">🐦</a>
-            </div>
-            <p>&copy; 2025 Portal Beasiswa Mahasiswa. Hak Cipta Dilindungi.</p>
+            <p>© 2025 Sistem Pendukung Keputusan. All rights reserved.</p>
         </div>
     </footer>
 </body>
