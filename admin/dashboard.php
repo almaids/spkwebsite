@@ -5,36 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SPK Rekomendasi Beasiswa</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar">
+        <!-- Sidebar -->
+        <div class="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">SPK Beasiswa</div>
         </div>
         <ul class="sidebar-menu">
             <li class="sidebar-menu-item active">
-                <i class="fas fa-home"></i>
-                <span>Dashboard</span>
+            <a href="dashboard.php">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
             </li>
             <li class="sidebar-menu-item">
                 <a href="mahasiswa.php">
                     <i class="fas fa-users"></i>
-                    <span>Data Mahasiswa</span>
+                    <span>Data Pendaftar</span>
                 </a>
             </li>
             <li class="sidebar-menu-item">
                 <i class="fas fa-award"></i>
-                <span>Data Beasiswa</span>
+                <span>Permohonan Diterima</span>
             </li>
             <li class="sidebar-menu-item">
                 <i class="fas fa-chart-bar"></i>
-                <span>Kriteria Penilaian</span>
+                <span>Permohonan Ditolak</span>
             </li>
             <li class="sidebar-menu-item">
                 <i class="fas fa-calculator"></i>
-                <span>Perhitungan SPK</span>
+                <span>Kriteria</span>
             </li>
             <li class="sidebar-menu-item">
                 <i class="fas fa-file-alt"></i>

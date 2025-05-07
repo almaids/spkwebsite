@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 // Cek role untuk redirect ke halaman yang sesuai
                 if ($row['role'] === 'admin') {
-                    header('location: dashboard.php');
+                    header('location: admin/dashboard.php');
                 } else {
                     header('location: homepage.php');
                 }
