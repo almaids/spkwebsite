@@ -82,8 +82,8 @@ $conn->close();
     </style>
 </head>
 <body>
-  <!-- Sidebar -->
-  <div class="sidebar">
+<!-- Sidebar -->
+<div class="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">SPK Beasiswa</div>
         </div>
@@ -235,7 +235,7 @@ $conn->close();
                                             <a href="edit_pendaftar.php?id=<?php echo $pendaftar['id_app']; ?>" class="btn btn-sm btn-warning" title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="dokumen_pendaftar.php?id=<?php echo $pendaftar['id_app']; ?>" class="btn btn-sm btn-secondary" title="Lihat Dokumen">
+                                            <a href="dokumen.php?id=<?php echo $pendaftar['id_app']; ?>" class="btn btn-sm btn-secondary" title="Lihat Dokumen">
                                                 <i class="fas fa-folder-open"></i>
                                             </a>
                                             <?php if ($pendaftar['status_dokumen'] == 'terverifikasi' && $pendaftar['status_keputusan'] == 'belum diproses'): ?>

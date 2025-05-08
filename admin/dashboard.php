@@ -8,17 +8,15 @@
     <link rel="stylesheet" href="../css/dashboard.css">
 </head>
 <body>
-        <!-- Sidebar -->
-        <div class="sidebar">
+    <!-- Sidebar -->
+    <div class="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">SPK Beasiswa</div>
         </div>
         <ul class="sidebar-menu">
             <li class="sidebar-menu-item active">
-            <a href="dashboard.php">
-                    <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
-                </a>
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
             </li>
             <li class="sidebar-menu-item">
                 <a href="mahasiswa.php">
@@ -53,9 +51,6 @@
     <div class="main">
         <!-- Header -->
         <div class="header">
-            <div class="menu-toggle">
-                <i class="fas fa-bars"></i>
-            </div>
             <div class="user-menu">
                 <img src="/api/placeholder/40/40" alt="User Avatar">
                 <span>Admin</span>
