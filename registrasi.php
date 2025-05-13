@@ -35,8 +35,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bind_param("sss", $nama, $email, $hashed_password);
 
             if ($stmt->execute()) {
-                $success = "Registrasi berhasil. Silakan login.";
-                $nama = $email = $password = '';
+                // Langsung redirect ke login page dengan parameter success
+                header('Location: login.php?registered=success');
+                exit();
             } else {
                 $error = "Terjadi kesalahan saat menyimpan data.";
             }
@@ -60,8 +61,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <?php if ($error): ?>
             <div class="message"><?= $error ?></div>
-        <?php elseif ($success): ?>
-            <div class="message" style="color: green; border-left-color: green;"><?= $success ?></div>
         <?php endif; ?>
 
         <div class="input-group email">
@@ -82,8 +81,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <button type="submit">Daftar</button>
 
         <div class="login-link">
-                Sudah punya akun? <a href="login.php">Masuk disini</a>
-            </div>
+            Sudah punya akun? <a href="login.php">Masuk disini</a>
+        </div>
     </form>
 </div>
 </body>
