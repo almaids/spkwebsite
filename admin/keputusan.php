@@ -12,6 +12,12 @@ if (!isset($_SESSION['user_id'])) {
 require_once '../config.php';
 require_once '../process_application.php';
 
+// Initialize search query
+$search = "";
+if (isset($_GET['search']) && !empty($_GET['search'])) {
+    $search = $_GET['search'];
+}
+
 // Initialize processor
 $processor = new BeasiswaProcessor($conn);
 
@@ -38,6 +44,13 @@ $total_pending = $pending_data['total_pending'];
 
 // Get ranking data
 $ranking = $processor->getRanking();
+
+// Add search condition if search is not empty
+if (!empty($search)) {
+    $search = $conn->real_escape_string($search);
+    $query .= " WHERE u.nama LIKE '%$search%' OR m.nim LIKE '%$search%'";
+}
+
 
 // Close database connection
 $conn->close();
@@ -142,7 +155,7 @@ $conn->close();
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
+        <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">SPK Beasiswa</div>
@@ -167,31 +180,38 @@ $conn->close();
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <a href="#">
-                    <i class="fas fa-chart-bar"></i>
+                <a href="permohonan-diterima.php">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Permohonan Diterima</span>
+                </a>
+            </li>
+            <li class="sidebar-menu-item">
+                <a href="permohonan-ditolak.php">
+                    <i class="fas fa-times-circle"></i>
                     <span>Permohonan Ditolak</span>
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <a href="#">
+                <a href="kriteria.php">
                     <i class="fas fa-calculator"></i>
                     <span>Kriteria</span>
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <a href="#">
+                <a href="laporan.php">
                     <i class="fas fa-file-alt"></i>
                     <span>Laporan</span>
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <a href="#">
+                <a href="pengaturan.php">
                     <i class="fas fa-cog"></i>
                     <span>Pengaturan</span>
                 </a>
             </li>
         </ul>
     </div>
+
 
     <!-- Main Content -->
     <div class="main">
@@ -244,6 +264,25 @@ $conn->close();
                 </div>
                 <?php endif; ?>
             </div>
+
+             <!-- Search Bar -->
+    <div class="search-container">
+    <form action="" method="GET" class="search-form">
+        <div class="search-input-group">
+            <input type="text" name="search" id="search" class="search-input" 
+                placeholder="Cari Nama Mahasiswa atau NIM..." 
+                value="<?php echo htmlspecialchars($search ?? ''); ?>">
+            <button type="submit" class="search-button">
+                <i class="fas fa-search"></i> Cari
+            </button>
+            <?php if (!empty($search)): ?>
+            <a href="mahasiswa.php" class="clear-search-button">
+                <i class="fas fa-times"></i> Reset
+            </a>
+            <?php endif; ?>
+        </div>
+    </form>
+</div>
 
             <div class="data-container">
                 <h2>Ranking Pendaftar Beasiswa</h2>

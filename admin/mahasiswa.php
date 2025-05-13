@@ -96,52 +96,63 @@ $conn->close();
     </style>
 </head>
 <body>
-<!-- Sidebar -->
-<div class="sidebar">
+    <!-- Sidebar -->
+    <div class="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">SPK Beasiswa</div>
         </div>
         <ul class="sidebar-menu">
-            <li class="sidebar-menu-item active">
-            <a href="dashboard.php">
+            <li class="sidebar-menu-item">
+                <a href="dashboard.php">
                     <i class="fas fa-home"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
-            <li class="sidebar-menu-item">
+            <li class="sidebar-menu-item active">
                 <a href="mahasiswa.php">
                     <i class="fas fa-users"></i>
                     <span>Data Pendaftar</span>
                 </a>
             </li>
-            <li class="sidebar-menu-item active">
+            <li class="sidebar-menu-item">
                 <a href="keputusan.php">
                     <i class="fas fa-award"></i>
                     <span>Keputusan Beasiswa</span>
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <i class="fas fa-award"></i>
-                <span>Permohonan Diterima</span>
+                <a href="permohonan-diterima.php">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Permohonan Diterima</span>
+                </a>
             </li>
             <li class="sidebar-menu-item">
-                <i class="fas fa-chart-bar"></i>
-                <span>Permohonan Ditolak</span>
+                <a href="permohonan-ditolak.php">
+                    <i class="fas fa-times-circle"></i>
+                    <span>Permohonan Ditolak</span>
+                </a>
             </li>
             <li class="sidebar-menu-item">
-                <i class="fas fa-calculator"></i>
-                <span>Kriteria</span>
+                <a href="kriteria.php">
+                    <i class="fas fa-calculator"></i>
+                    <span>Kriteria</span>
+                </a>
             </li>
             <li class="sidebar-menu-item">
-                <i class="fas fa-file-alt"></i>
-                <span>Laporan</span>
+                <a href="laporan.php">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Laporan</span>
+                </a>
             </li>
             <li class="sidebar-menu-item">
-                <i class="fas fa-cog"></i>
-                <span>Pengaturan</span>
+                <a href="pengaturan.php">
+                    <i class="fas fa-cog"></i>
+                    <span>Pengaturan</span>
+                </a>
             </li>
         </ul>
     </div>
+
 
     <!-- Main Content -->
     <div class="main">
@@ -151,7 +162,7 @@ $conn->close();
                 <i class="fas fa-bars"></i>
             </div>
             <div class="user-menu">
-                <img src="/api/placeholder/40/40" alt="User Avatar">
+                <img src="logofom.png" alt="User Avatar">
                 <span>Admin</span>
             </div>
         </div>
@@ -166,7 +177,7 @@ $conn->close();
     <form action="" method="GET" class="search-form">
         <div class="search-input-group">
             <input type="text" name="search" id="search" class="search-input" 
-                placeholder="Cari nama mahasiswa atau NIM..." 
+                placeholder="Cari Nama Mahasiswa atau NIM..." 
                 value="<?php echo htmlspecialchars($search ?? ''); ?>">
             <button type="submit" class="search-button">
                 <i class="fas fa-search"></i> Cari

@@ -36,60 +36,66 @@ body {
     overflow-x: hidden;
 }
 
-/* Sidebar */
+/* Updated CSS for sidebar navigation links */
 .sidebar {
-    position: fixed;
-    width: var(--sidebar-width);
-    height: 100vh;
-    background: linear-gradient(180deg, var(--blueQueen) 0%, var(--greenSeaweed) 100%);
-    color: white;
-    transition: all 0.3s ease;
-    z-index: 1000;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+position: fixed;
+width: var(--sidebar-width);
+height: 100vh;
+background: linear-gradient(180deg, var(--blueQueen) 0%, var(--greenSeaweed) 100%);
+color: white;
+transition: all 0.3s ease;
+z-index: 1000;
+box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
 }
-
 .sidebar-header {
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    height: var(--header-height);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+padding: 20px;
+display: flex;
+align-items: center;
+height: var(--header-height);
+border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-
 .sidebar-logo {
-    font-size: 1.5rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+font-size: 1.5rem;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: 1px;
 }
-
 .sidebar-menu {
-    padding: 20px 0;
-    list-style: none;
+padding: 20px 0;
+list-style: none;
 }
-
+/* Fix for sidebar menu items */
 .sidebar-menu-item {
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
+position: relative;
+transition: all 0.2s ease;
+}
+/* Ensure menu items with anchors are styled properly */
+.sidebar-menu-item a {
+display: flex;
+align-items: center;
+color: white;
+text-decoration: none;
+padding: 10px 20px;
+width: 100%;
+transition: all 0.2s ease;
 }
 
-.sidebar-menu-item:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+.sidebar-menu-item.active,
+.sidebar-menu-item.active a {
+background-color: rgba(255, 255, 255, 0.2);
+border-right: 4px solid white;
+font-weight: 600;
 }
-
-.sidebar-menu-item.active {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-right: 4px solid white;
-}
-
 .sidebar-menu-item i {
-    margin-right: 10px;
-    font-size: 1.1rem;
+margin-right: 10px;
+font-size: 1.1rem;
+width: 20px;
+text-align: center;
 }
-
+/* Add specific styling for icon and text to ensure proper alignment */
+.sidebar-menu-item span {
+padding-left: 5px;
+}
 /* Main content */
 .main {
     margin-left: var(--sidebar-width);

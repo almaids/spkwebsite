@@ -6,6 +6,29 @@
     <title>SPK Rekomendasi Beasiswa</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/dashboard.css">
+    <style>
+        /* Additional styles to fix navigation */
+        .sidebar-menu-item a {
+            display: flex;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+        
+        .sidebar-menu-item:hover a,
+        .sidebar-menu-item a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-menu-item.active a {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-right: 4px solid white;
+            font-weight: 600;
+        }
+    </style>
 </head>
 <body>
     <!-- Sidebar -->
@@ -15,8 +38,10 @@
         </div>
         <ul class="sidebar-menu">
             <li class="sidebar-menu-item active">
-                <i class="fas fa-home"></i>
-                <span>Dashboard</span>
+                <a href="dashboard.php">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
             </li>
             <li class="sidebar-menu-item">
                 <a href="mahasiswa.php">
@@ -24,31 +49,41 @@
                     <span>Data Pendaftar</span>
                 </a>
             </li>
-            <li class="sidebar-menu-item active">
+            <li class="sidebar-menu-item">
                 <a href="keputusan.php">
                     <i class="fas fa-award"></i>
                     <span>Keputusan Beasiswa</span>
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <i class="fas fa-award"></i>
-                <span>Permohonan Diterima</span>
+                <a href="permohonan-diterima.php">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Permohonan Diterima</span>
+                </a>
             </li>
             <li class="sidebar-menu-item">
-                <i class="fas fa-chart-bar"></i>
-                <span>Permohonan Ditolak</span>
+                <a href="permohonan-ditolak.php">
+                    <i class="fas fa-times-circle"></i>
+                    <span>Permohonan Ditolak</span>
+                </a>
             </li>
             <li class="sidebar-menu-item">
-                <i class="fas fa-calculator"></i>
-                <span>Kriteria</span>
+                <a href="kriteria.php">
+                    <i class="fas fa-calculator"></i>
+                    <span>Kriteria</span>
+                </a>
             </li>
             <li class="sidebar-menu-item">
-                <i class="fas fa-file-alt"></i>
-                <span>Laporan</span>
+                <a href="laporan.php">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Laporan</span>
+                </a>
             </li>
             <li class="sidebar-menu-item">
-                <i class="fas fa-cog"></i>
-                <span>Pengaturan</span>
+                <a href="pengaturan.php">
+                    <i class="fas fa-cog"></i>
+                    <span>Pengaturan</span>
+                </a>
             </li>
         </ul>
     </div>
@@ -57,6 +92,9 @@
     <div class="main">
         <!-- Header -->
         <div class="header">
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
             <div class="user-menu">
                 <img src="/api/placeholder/40/40" alt="User Avatar">
                 <span>Admin</span>
@@ -121,7 +159,7 @@
                 </button>
             </div>
             <div class="table-container">
-        
+                <!-- Table content will go here -->
             </div>
         </div>
     </div>
@@ -132,15 +170,33 @@
             document.querySelector('.sidebar').classList.toggle('active');
         });
         
-        // Active menu item
-        document.querySelectorAll('.sidebar-menu-item').forEach(function(item) {
-            item.addEventListener('click', function() {
+        // Get current page URL
+        const currentLocation = window.location.href;
+        
+        // Get all menu items with anchors
+        const menuItems = document.querySelectorAll('.sidebar-menu-item a');
+        
+        // Set default active if no match is found
+        let activeFound = false;
+        
+        // Loop through menu items to find the current page
+        menuItems.forEach(function(item) {
+            // Compare href with current location
+            if (item.href === currentLocation) {
+                // Clear active class from all items
                 document.querySelectorAll('.sidebar-menu-item').forEach(function(i) {
                     i.classList.remove('active');
                 });
-                this.classList.add('active');
-            });
+                // Add active class to current item's parent
+                item.parentElement.classList.add('active');
+                activeFound = true;
+            }
         });
+        
+        // If no active item found, set the dashboard as active by default
+        if (!activeFound && currentLocation.includes('dashboard.php')) {
+            document.querySelector('.sidebar-menu-item:first-child').classList.add('active');
+        }
     </script>
 </body>
 </html>
