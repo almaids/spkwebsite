@@ -24,6 +24,12 @@
                     <span>Data Pendaftar</span>
                 </a>
             </li>
+            <li class="sidebar-menu-item active">
+                <a href="keputusan.php">
+                    <i class="fas fa-award"></i>
+                    <span>Keputusan Beasiswa</span>
+                </a>
+            </li>
             <li class="sidebar-menu-item">
                 <i class="fas fa-award"></i>
                 <span>Permohonan Diterima</span>
@@ -74,16 +80,7 @@
                     </div>
                     <div class="stat-card-info">
                         <h4>248</h4>
-                        <p>Total Mahasiswa</p>
-                    </div>
-                </div>
-                <div class="card stat-card">
-                    <div class="stat-card-icon bg-success">
-                        <i class="fas fa-award"></i>
-                    </div>
-                    <div class="stat-card-info">
-                        <h4>15</h4>
-                        <p>Program Beasiswa</p>
+                        <p>Total Pendaftar</p>
                     </div>
                 </div>
                 <div class="card stat-card">
@@ -93,15 +90,6 @@
                     <div class="stat-card-info">
                         <h4>87</h4>
                         <p>Penerima Beasiswa</p>
-                    </div>
-                </div>
-                <div class="card stat-card">
-                    <div class="stat-card-icon bg-info">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <div class="stat-card-info">
-                        <h4>3</h4>
-                        <p>Beasiswa Aktif</p>
                     </div>
                 </div>
             </div>

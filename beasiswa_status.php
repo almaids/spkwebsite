@@ -14,13 +14,51 @@ if (!isset($_SESSION['user_id'])) {
 // Database connection
 require_once 'config.php';
 
+// Cek apakah mahasiswa sudah pernah mendaftar beasiswa
+$userId = $_SESSION['user_id'];
+
+$cekPendaftaran = "SELECT COUNT(*) as jumlah_aplikasi 
+                   FROM beasiswa_applications ba
+                   JOIN mahasiswa m ON ba.mahasiswa_id = m.id_mahasiswa
+                   WHERE m.user_id = ?";
+                   
+$stmt = $conn->prepare($cekPendaftaran);
+$stmt->bind_param("i", $userId);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+
+// Jika mahasiswa belum pernah mendaftar
+if ($row['jumlah_aplikasi'] == 0) {
+    // Redirect ke halaman formulir dengan pesan notifikasi
+    header('Location: formulir.php?msg=belum_daftar');
+    exit;
+}
+
 // Cek apakah ada parameter app_id
 if (isset($_GET['app_id'])) {
     $appId = $_GET['app_id'];
+    
+    // Pastikan app_id ini milik mahasiswa yang sedang login
+    $cekAppId = "SELECT COUNT(*) as valid_app 
+                 FROM beasiswa_applications ba
+                 JOIN mahasiswa m ON ba.mahasiswa_id = m.id_mahasiswa
+                 WHERE ba.id_app = ? AND m.user_id = ?";
+                 
+    $stmt = $conn->prepare($cekAppId);
+    $stmt->bind_param("ii", $appId, $userId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    
+    // Jika app_id tidak valid atau bukan milik mahasiswa ini
+    if ($row['valid_app'] == 0) {
+        // Redirect ke app_id terbaru milik mahasiswa
+        header('Location: beasiswa_status.php');
+        exit;
+    }
 } else {
     // Jika tidak ada, ambil app_id terbaru dari mahasiswa yang login
-    $userId = $_SESSION['user_id'];
-    
     $sql = "SELECT ba.id_app 
             FROM beasiswa_applications ba
             JOIN mahasiswa m ON ba.mahasiswa_id = m.id_mahasiswa
@@ -37,8 +75,8 @@ if (isset($_GET['app_id'])) {
         $row = $result->fetch_assoc();
         $appId = $row['id_app'];
     } else {
-        // Jika tidak ada aplikasi, redirect ke halaman daftar
-        header('Location: formulir.php');
+        // Error handling - seharusnya tidak terjadi karena sudah dicek di awal
+        header('Location: homepage.php?error=data_not_found');
         exit;
     }
 }

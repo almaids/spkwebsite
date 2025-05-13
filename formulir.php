@@ -76,7 +76,7 @@ if (empty($mahasiswa['nim']) || empty($mahasiswa['semester']) || empty($prodi['n
 <body>
     <div class="container">
         <div class="form-header">
-            <img src="/api/placeholder/150/150" alt="Logo Universitas">
+            <img src="logofom.png" alt="Logo Universitas">
             <h1>Formulir Pendaftaran Beasiswa</h1>
         </div>
         

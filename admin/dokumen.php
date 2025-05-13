@@ -252,62 +252,59 @@ $conn->close();
             margin-left: 8px;
             vertical-align: middle;
         }
+        .badge-status {
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            display: inline-block;
+            margin-top: 5px;
+            margin-right: 5px;
+            min-width: 90px;
+            text-align: center;
+        }
 
-        /* Add this CSS to the style section in dokumen.php to fix the badge display */
+        .badge-valid, .badge-terverifikasi {
+            background-color: #27ae60;
+        }
 
-.badge-status {
-    color: white;
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-size: 0.8em;
-    display: inline-block;
-    margin-top: 5px;
-    margin-right: 5px;
-    min-width: 90px;
-    text-align: center;
-}
+        .badge-invalid, .badge-ditolak {
+            background-color: #e74c3c;
+        }
 
-.badge-valid, .badge-terverifikasi {
-    background-color: #27ae60;
-}
+        .badge-pending, .badge-sedang-diverifikasi {
+            background-color: #f39c12;
+        }
 
-.badge-invalid, .badge-ditolak {
-    background-color: #e74c3c;
-}
+        .badge-missing, .badge-belum-lengkap, .badge-belum-diverifikasi {
+            background-color: #95a5a6;
+        }
 
-.badge-pending, .badge-sedang-diverifikasi {
-    background-color: #f39c12;
-}
+        .document-item {
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
 
-.badge-missing, .badge-belum-lengkap, .badge-belum-diverifikasi {
-    background-color: #95a5a6;
-}
+        .document-item h4 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #333;
+        }
 
-.document-item {
-    border: 1px solid #e0e0e0;
-    border-radius: 5px;
-    padding: 20px;
-    margin-bottom: 20px;
-    background-color: #f9f9f9;
-}
 
-.document-item h4 {
-    margin-top: 0;
-    margin-bottom: 15px;
-    color: #333;
-}
+        .document-preview {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
 
-/* Improve spacing between document status and the rest of the content */
-.document-preview {
-    margin-top: 15px;
-    margin-bottom: 15px;
-}
-
-.verification-form {
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px dashed #ddd;
-}
+        .verification-form {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px dashed #ddd;
+        }
         .verification-form {
             margin-top: 15px;
             padding-top: 15px;
@@ -393,6 +390,12 @@ $conn->close();
                 <a href="mahasiswa.php">
                     <i class="fas fa-users"></i>
                     <span>Data Pendaftar</span>
+                </a>
+            </li>
+            <li class="sidebar-menu-item active">
+                <a href="keputusan.php">
+                    <i class="fas fa-award"></i>
+                    <span>Keputusan Beasiswa</span>
                 </a>
             </li>
             <li class="sidebar-menu-item">

@@ -1,3 +1,4 @@
+/* Gaya dasar yang ada sebelumnya */
 :root {
     /* Warna yang disesuaikan dengan login dan registrasi */
     --blueQueen: rgb(69, 105, 144);
@@ -44,34 +45,198 @@ header p {
     opacity: 0.9;
 }
 
+/* Navbar yang diperbarui */
 nav {
     background-color: white;
-    padding: 1rem;
+    padding: 0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 nav ul {
     display: flex;
     list-style: none;
-    gap: 2rem;
+    margin: 0;
+    padding: 0;
+    justify-content: space-around; /* Mengubah dari center ke space-around untuk spacing yang lebih baik */
+    max-width: 1200px; /* Menetapkan lebar maksimum sesuai dengan konten utama */
+    margin: 0 auto; /* Auto margin untuk centering horizontal */
+}
+
+nav li {
+    position: relative;
+    margin: 0;
+    flex: 1; /* Setiap item mendapatkan ruang yang sama */
+    text-align: center; /* Teks di tengah item */
 }
 
 nav a {
     text-decoration: none;
     color: var(--dark);
     font-weight: 500;
-    transition: color 0.3s;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
+    transition: all 0.3s;
+    padding: 1.2rem 1rem; /* Mengurangi padding horizontal sedikit */
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centering konten link */
+    gap: 0.5rem;
 }
 
 nav a:hover {
-    color: var(--blueQueen);
-    background-color: rgba(69, 105, 144, 0.1);
+    color: var(--redFire);
+    background-color: rgba(244, 91, 105, 0.1);
 }
 
+nav a i {
+    font-size: 1rem;
+}
+
+/* Dropdown styling yang dioptimalkan */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centering konten */
+    gap: 0.5rem;
+    cursor: pointer;
+    width: 100%; /* Menggunakan seluruh lebar item parent */
+}
+
+.dropdown-toggle .fa-chevron-down {
+    font-size: 0.8rem;
+    margin-left: 0.3rem;
+    transition: transform 0.3s;
+}
+
+.dropdown.active .fa-chevron-down {
+    transform: rotate(180deg);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%; /* Center posisi menu */
+    transform: translateX(-50%) translateY(10px); /* Center horizontal dengan animasi vertical */
+    background-color: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+    border-radius: 0 0 4px 4px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+    z-index: 101;
+    display: none;
+}
+
+.dropdown.active .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0); /* Tetap center saat muncul */
+    display: block;
+}
+
+.dropdown-menu a {
+    padding: 1rem 1.5rem;
+    display: block;
+    border-bottom: 1px solid #f5f5f5;
+    justify-content: flex-start; /* Alignment teks di kiri untuk dropdown items */
+}
+
+.dropdown-menu a:last-child {
+    border-bottom: none;
+}
+
+.dropdown-menu a:hover {
+    background-color: rgba(244, 91, 105, 0.1);
+}
+
+/* Active state untuk navbar */
+nav a.active {
+    color: var(--redFire);
+    border-bottom: 3px solid var(--redFire);
+}
+
+/* Responsive navbar */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    nav li {
+        width: 100%;
+    }
+    
+    nav a {
+        padding: 1rem 1.5rem;
+        justify-content: center;
+    }
+    
+    .dropdown-menu {
+        position: static;
+        box-shadow: none;
+        width: 100%;
+        transform: none;
+        left: 0;
+    }
+    
+    .dropdown.active .dropdown-menu {
+        transform: none;
+    }
+    
+    .dropdown-menu a {
+        padding-left: 3rem;
+        text-align: left;
+    }
+}
+
+/* Feature card update for single scholarship */
+.features {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3rem;
+}
+
+.feature-card {
+    background-color: white;
+    padding: 2.5rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s;
+    max-width: 600px;
+    width: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--blueQueen);
+    text-align: center;
+}
+
+.feature-card h3 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: var(--greenSeaweed);
+    text-align: center;
+}
+
+.feature-card p {
+    font-size: 1.1rem;
+    text-align: center;
+    color: #555;
+}
+
+/* Rest of the original CSS remains the same */
 .container {
     max-width: 1200px;
     margin: 2rem auto;
@@ -128,37 +293,6 @@ nav a:hover {
     background-color: rgb(229, 76, 90);
     transform: translateY(-2px);
     box-shadow: 0 6px 8px rgba(244, 91, 105, 0.4);
-}
-
-.features {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-bottom: 3rem;
-}
-
-.feature-card {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s;
-}
-
-.feature-card:hover {
-    transform: translateY(-5px);
-}
-
-.feature-icon {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    color: var(--blueQueen);
-}
-
-.feature-card h3 {
-    margin-bottom: 1rem;
-    font-size: 1.3rem;
-    color: var(--greenSeaweed);
 }
 
 .steps {
@@ -360,12 +494,6 @@ footer {
 @media (max-width: 768px) {
     .hero {
         flex-direction: column;
-    }
-    
-    nav ul {
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
     }
     
     .step-list {

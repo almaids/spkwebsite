@@ -11,14 +11,28 @@ if (!isset($_SESSION['user_id'])) {
 // Include database connection from config file
 require_once '../config.php';
 
+// Initialize search query
+$search = "";
+if (isset($_GET['search']) && !empty($_GET['search'])) {
+    $search = $_GET['search'];
+}
+
 // Get all beasiswa applications data with joined tables
 $query = "SELECT ba.id_app, ba.tanggal_daftar, ba.status_dokumen, ba.status_keputusan, ba.total_nilai, 
                  u.nama, 
                  m.id_mahasiswa, m.nim
           FROM beasiswa_applications ba 
           JOIN mahasiswa m ON ba.mahasiswa_id = m.id_mahasiswa 
-          JOIN users u ON m.user_id = u.id_user 
-          ORDER BY ba.id_app DESC";
+          JOIN users u ON m.user_id = u.id_user";
+
+
+// Add search condition if search is not empty
+if (!empty($search)) {
+    $search = $conn->real_escape_string($search);
+    $query .= " WHERE u.nama LIKE '%$search%' OR m.nim LIKE '%$search%'";
+}
+
+$query .= " ORDER BY ba.id_app DESC";
 
 $result = $conn->query($query);
 $pendaftar_list = [];
@@ -100,6 +114,12 @@ $conn->close();
                     <span>Data Pendaftar</span>
                 </a>
             </li>
+            <li class="sidebar-menu-item active">
+                <a href="keputusan.php">
+                    <i class="fas fa-award"></i>
+                    <span>Keputusan Beasiswa</span>
+                </a>
+            </li>
             <li class="sidebar-menu-item">
                 <i class="fas fa-award"></i>
                 <span>Permohonan Diterima</span>
@@ -139,10 +159,26 @@ $conn->close();
         <div class="content">
             <div class="section-header">
                 <h1 class="section-title">Data Pendaftar Beasiswa</h1>
-                <button class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Input Data Baru
-                </button>
             </div>
+
+        <!-- Search Bar -->
+    <div class="search-container">
+    <form action="" method="GET" class="search-form">
+        <div class="search-input-group">
+            <input type="text" name="search" id="search" class="search-input" 
+                placeholder="Cari nama mahasiswa atau NIM..." 
+                value="<?php echo htmlspecialchars($search ?? ''); ?>">
+            <button type="submit" class="search-button">
+                <i class="fas fa-search"></i> Cari
+            </button>
+            <?php if (!empty($search)): ?>
+            <a href="mahasiswa.php" class="clear-search-button">
+                <i class="fas fa-times"></i> Reset
+            </a>
+            <?php endif; ?>
+        </div>
+    </form>
+</div>
 
         <div class="data-container">
             <?php if (empty($pendaftar_list)): ?>
