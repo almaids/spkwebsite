@@ -284,29 +284,37 @@ $conn->close();
                 </div>
             </div>
             
-            <div class="card mt-4">
+            <div class="card mt-5" style="margin-top: 30px;">
                 <div class="card-header">
-                    <h2>Informasi Kriteria</h2>
-                </div>
-                <div class="card-body">
-                    <h3>Penjelasan Kriteria:</h3>
-                    <ul>
-                        <li><strong>IPK (Indeks Prestasi Kumulatif)</strong> - Nilai akademik mahasiswa yang menunjukkan performa belajar.</li>
-                        <li><strong>Jarak Tempat Tinggal</strong> - Jarak tempat tinggal mahasiswa dari kampus dalam kilometer.</li>
-                        <li><strong>Penghasilan Orang Tua</strong> - Total penghasilan orang tua per bulan.</li>
-                        <li><strong>Tanggungan Orang Tua</strong> - Jumlah anggota keluarga yang masih menjadi tanggungan.</li>
-                    </ul>
-                    
-                    <h3>Penjelasan Sifat Kriteria:</h3>
-                    <ul>
-                        <li><strong>Benefit</strong> - Semakin tinggi nilai, semakin baik (contoh: IPK).</li>
-                        <li><strong>Cost</strong> - Semakin rendah nilai, semakin baik (contoh: Penghasilan Orang Tua).</li>
-                    </ul>
-                    
-                    <h3>Catatan Penting:</h3>
-                    <p>Total bobot semua kriteria harus berjumlah 1.0 (atau 100%) untuk hasil penilaian yang valid.</p>
-                </div>
+                <h2>Informasi Kriteria</h2>
+    </div>
+    <div class="card-body">
+        <section style="margin-bottom: 20px;">
+            <h3>Penjelasan Kriteria</h3>
+            <ul style="list-style-type: disc; padding-left: 20px;">
+                <li><strong>IPK (Indeks Prestasi Kumulatif)</strong>: Nilai akademik mahasiswa yang menunjukkan performa belajar.</li>
+                <li><strong>Jarak Tempat Tinggal</strong>: Jarak tempat tinggal mahasiswa dari kampus dalam kilometer.</li>
+                <li><strong>Penghasilan Orang Tua</strong>: Total penghasilan orang tua per bulan.</li>
+                <li><strong>Tanggungan Orang Tua</strong>: Jumlah anggota keluarga yang masih menjadi tanggungan.</li>
+            </ul>
+        </section>
+        
+        <section style="margin-bottom: 20px;">
+            <h3>Penjelasan Sifat Kriteria</h3>
+            <ul style="list-style-type: disc; padding-left: 20px;">
+                <li><strong>Benefit</strong>: Semakin tinggi nilai, semakin baik (contoh: IPK).</li>
+                <li><strong>Cost</strong>: Semakin rendah nilai, semakin baik (contoh: Penghasilan Orang Tua).</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>Catatan Penting</h3>
+            <p style="margin: 0;">
+                Total bobot semua kriteria harus berjumlah <strong>1.0 (atau 100%)</strong> untuk hasil penilaian yang valid.
+            </p>
+                    </section>
             </div>
+        </div>
         </div>
     </div>
     
