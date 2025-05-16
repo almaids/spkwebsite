@@ -73,7 +73,7 @@ $conn->close();
         overflow-x: auto;
     }
     .table {
-        font-size: 0.700rem; /* Tambahan ini untuk mengecilkan font tabel */
+        font-size: 0.700rem; 
     }
     .badge-status {
         color: white;
@@ -121,13 +121,13 @@ $conn->close();
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <a href="permohonan-diterima.php">
+                <a href="permohonan_diterima.php">
                     <i class="fas fa-check-circle"></i>
                     <span>Permohonan Diterima</span>
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <a href="permohonan-ditolak.php">
+                <a href="permohonan_ditolak.php">
                     <i class="fas fa-times-circle"></i>
                     <span>Permohonan Ditolak</span>
                 </a>
@@ -273,17 +273,9 @@ $conn->close();
                                             <a href="detail_pendaftar.php?id=<?php echo $pendaftar['id_app']; ?>" class="btn btn-sm btn-info" title="Detail">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="edit_pendaftar.php?id=<?php echo $pendaftar['id_app']; ?>" class="btn btn-sm btn-warning" title="Edit">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
                                             <a href="dokumen.php?id=<?php echo $pendaftar['id_app']; ?>" class="btn btn-sm btn-secondary" title="Lihat Dokumen">
                                                 <i class="fas fa-folder-open"></i>
                                             </a>
-                                            <?php if ($pendaftar['status_dokumen'] == 'terverifikasi' && $pendaftar['status_keputusan'] == 'belum diproses'): ?>
-                                            <a href="proses_saw.php?id=<?php echo $pendaftar['id_app']; ?>" class="btn btn-sm btn-success" title="Proses SAW">
-                                                <i class="fas fa-calculator"></i>
-                                            </a>
-                                            <?php endif; ?>
                                         </div>
                                     </td>
                                 </tr>

@@ -399,13 +399,13 @@ $conn->close();
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <a href="#">
+                <a href="permohonan_diterima.php">
                     <i class="fas fa-award"></i>
                     <span>Permohonan Diterima</span>
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <a href="#">
+                <a href="permohonan_ditolak.php">
                     <i class="fas fa-chart-bar"></i>
                     <span>Permohonan Ditolak</span>
                 </a>

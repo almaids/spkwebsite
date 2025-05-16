@@ -212,13 +212,13 @@ $conn->close();
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <a href="permohonan-diterima.php">
+                <a href="permohonan_diterima.php">
                     <i class="fas fa-check-circle"></i>
                     <span>Permohonan Diterima</span>
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <a href="permohonan-ditolak.php">
+                <a href="permohonan_ditolak.php">
                     <i class="fas fa-times-circle"></i>
                     <span>Permohonan Ditolak</span>
                 </a>
