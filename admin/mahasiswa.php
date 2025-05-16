@@ -139,15 +139,9 @@ $conn->close();
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <a href="laporan.php">
-                    <i class="fas fa-file-alt"></i>
-                    <span>Laporan</span>
-                </a>
-            </li>
-            <li class="sidebar-menu-item">
-                <a href="pengaturan.php">
-                    <i class="fas fa-cog"></i>
-                    <span>Pengaturan</span>
+                <a href="../index.php">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
                 </a>
             </li>
         </ul>

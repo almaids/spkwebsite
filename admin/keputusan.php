@@ -21,6 +21,30 @@ if (isset($_GET['search']) && !empty($_GET['search'])) {
 // Initialize processor
 $processor = new BeasiswaProcessor($conn);
 
+// Get ranking data
+$ranking = $processor->getRanking();
+
+// Get highest SAW value
+$highestSAW = $processor->getHighestSAWValue();
+
+// Set default minimum nilai - sedikit di bawah nilai tertinggi (99% dari nilai tertinggi)
+$defaultMinimum = $highestSAW > 0 ? $highestSAW * 0.99 : 0.65;
+
+// Handle recalculation request
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recalculate_saw'])) {
+    $result = $processor->calculateSAW();
+    
+    if ($result['success']) {
+        $success_message = "Nilai SAW berhasil dihitung ulang.";
+        // Refresh ranking data dan nilai tertinggi
+        $ranking = $processor->getRanking();
+        $highestSAW = $processor->getHighestSAWValue();
+        $defaultMinimum = $highestSAW > 0 ? $highestSAW * 0.99 : 0.65;
+    } else {
+        $error_message = $result['message'];
+    }
+}
+
 // Handle form submission for determining decisions
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['process_decisions'])) {
     $nilaiMinimum = floatval($_POST['nilai_minimum']);
@@ -42,15 +66,11 @@ $result_pending = $conn->query($query_pending);
 $pending_data = $result_pending->fetch_assoc();
 $total_pending = $pending_data['total_pending'];
 
-// Get ranking data
-$ranking = $processor->getRanking();
-
 // Add search condition if search is not empty
 if (!empty($search)) {
     $search = $conn->real_escape_string($search);
     $query .= " WHERE u.nama LIKE '%$search%' OR m.nim LIKE '%$search%'";
 }
-
 
 // Close database connection
 $conn->close();
@@ -135,6 +155,11 @@ $conn->close();
             background-color: #f8d7da;
             border-color: #f5c6cb;
         }
+        .alert-info {
+            color: #0c5460;
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+        }
         .table {
             width: 100%;
             border-collapse: collapse;
@@ -152,10 +177,32 @@ $conn->close();
         .table tr:nth-child(even) {
             background-color: #f9f9f9;
         }
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: white;
+            margin-right: 10px;
+        }
+        .button-group {
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
-        <!-- Sidebar -->
+    <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">SPK Beasiswa</div>
@@ -198,20 +245,13 @@ $conn->close();
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <a href="laporan.php">
-                    <i class="fas fa-file-alt"></i>
-                    <span>Laporan</span>
-                </a>
-            </li>
-            <li class="sidebar-menu-item">
-                <a href="pengaturan.php">
-                    <i class="fas fa-cog"></i>
-                    <span>Pengaturan</span>
+                <a href="../index.php">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
                 </a>
             </li>
         </ul>
     </div>
-
 
     <!-- Main Content -->
     <div class="main">
@@ -247,12 +287,20 @@ $conn->close();
                 <h2>Proses Keputusan Beasiswa</h2>
                 <p>Terdapat <strong><?php echo $total_pending; ?></strong> pendaftar yang sudah terverifikasi dan menunggu keputusan.</p>
                 
+                <div class="button-group">
+                    <form method="post" action="" style="display: inline-block;">
+                        <button type="submit" name="recalculate_saw" class="btn btn-secondary">
+                            <i class="fas fa-calculator"></i> Hitung Ulang Nilai SAW
+                        </button>
+                    </form>
+                </div>
+                
                 <?php if ($total_pending > 0): ?>
                 <form method="post" action="">
                     <div class="form-group">
                         <label for="nilai_minimum">Nilai Minimum untuk Diterima:</label>
-                        <input type="number" step="0.01" min="0" max="1" name="nilai_minimum" id="nilai_minimum" class="form-control" value="0.75" required>
-                        <small>Pendaftar dengan nilai SAW >= nilai minimum ini akan diterima, sisanya ditolak.</small>
+                        <input type="number" step="0.01" min="0" max="1" name="nilai_minimum" id="nilai_minimum" class="form-control" value="<?php echo htmlspecialchars($defaultMinimum); ?>" required>
+                        <small>Pendaftar dengan nilai SAW >= nilai minimum ini akan diterima, sisanya ditolak. Nilai default adalah 99% dari nilai tertinggi (<?php echo number_format($highestSAW, 4); ?>).</small>
                     </div>
                     <button type="submit" name="process_decisions" class="btn btn-primary">
                         <i class="fas fa-cogs"></i> Proses Keputusan
@@ -266,23 +314,23 @@ $conn->close();
             </div>
 
              <!-- Search Bar -->
-    <div class="search-container">
-    <form action="" method="GET" class="search-form">
-        <div class="search-input-group">
-            <input type="text" name="search" id="search" class="search-input" 
-                placeholder="Cari Nama Mahasiswa atau NIM..." 
-                value="<?php echo htmlspecialchars($search ?? ''); ?>">
-            <button type="submit" class="search-button">
-                <i class="fas fa-search"></i> Cari
-            </button>
-            <?php if (!empty($search)): ?>
-            <a href="mahasiswa.php" class="clear-search-button">
-                <i class="fas fa-times"></i> Reset
-            </a>
-            <?php endif; ?>
-        </div>
-    </form>
-</div>
+            <div class="search-container">
+                <form action="" method="GET" class="search-form">
+                    <div class="search-input-group">
+                        <input type="text" name="search" id="search" class="search-input" 
+                            placeholder="Cari Nama Mahasiswa atau NIM..." 
+                            value="<?php echo htmlspecialchars($search ?? ''); ?>">
+                        <button type="submit" class="search-button">
+                            <i class="fas fa-search"></i> Cari
+                        </button>
+                        <?php if (!empty($search)): ?>
+                        <a href="keputusan.php" class="clear-search-button">
+                            <i class="fas fa-times"></i> Reset
+                        </a>
+                        <?php endif; ?>
+                    </div>
+                </form>
+            </div>
 
             <div class="data-container">
                 <h2>Ranking Pendaftar Beasiswa</h2>

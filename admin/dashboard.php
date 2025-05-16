@@ -74,15 +74,9 @@
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <a href="laporan.php">
-                    <i class="fas fa-file-alt"></i>
-                    <span>Laporan</span>
-                </a>
-            </li>
-            <li class="sidebar-menu-item">
-                <a href="pengaturan.php">
-                    <i class="fas fa-cog"></i>
-                    <span>Pengaturan</span>
+                <a href="../index.php">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
                 </a>
             </li>
         </ul>
@@ -105,9 +99,6 @@
         <div class="content">
             <div class="section-header">
                 <h1 class="section-title">Dashboard</h1>
-                <button class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Input Data Baru
-                </button>
             </div>
 
             <!-- Stat Cards -->

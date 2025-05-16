@@ -392,7 +392,7 @@ $conn->close();
                     <span>Data Pendaftar</span>
                 </a>
             </li>
-            <li class="sidebar-menu-item active">
+            <li class="sidebar-menu-item">
                 <a href="keputusan.php">
                     <i class="fas fa-award"></i>
                     <span>Keputusan Beasiswa</span>
@@ -417,15 +417,9 @@ $conn->close();
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <a href="#">
-                    <i class="fas fa-file-alt"></i>
-                    <span>Laporan</span>
-                </a>
-            </li>
-            <li class="sidebar-menu-item">
-                <a href="#">
-                    <i class="fas fa-cog"></i>
-                    <span>Pengaturan</span>
+                <a href="../index.php">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
                 </a>
             </li>
         </ul>
