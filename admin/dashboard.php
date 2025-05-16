@@ -1,3 +1,42 @@
+<?php
+// Koneksi database
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "spk";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Cek koneksi
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+}
+
+// Query untuk mendapatkan total pendaftar
+$sqlTotalPendaftar = "SELECT COUNT(*) as total FROM beasiswa_applications";
+$resultTotalPendaftar = $conn->query($sqlTotalPendaftar);
+$totalPendaftar = $resultTotalPendaftar->fetch_assoc()['total'];
+
+// Query untuk mendapatkan jumlah permohonan diterima
+$sqlDiterima = "SELECT COUNT(*) as total FROM beasiswa_applications WHERE status_keputusan = 'diterima'";
+$resultDiterima = $conn->query($sqlDiterima);
+$totalDiterima = $resultDiterima->fetch_assoc()['total'];
+
+// Query untuk mendapatkan jumlah permohonan ditolak
+$sqlDitolak = "SELECT COUNT(*) as total FROM beasiswa_applications WHERE status_keputusan = 'ditolak'";
+$resultDitolak = $conn->query($sqlDitolak);
+$totalDitolak = $resultDitolak->fetch_assoc()['total'];
+
+// Query untuk mendapatkan pendaftar terbaru
+$sqlPendaftarTerbaru = "SELECT ba.id_app, ba.tanggal_daftar, ba.status_keputusan, 
+                        u.nama, m.nim, p.nama_prodi
+                        FROM beasiswa_applications ba
+                        JOIN mahasiswa m ON ba.mahasiswa_id = m.id_mahasiswa
+                        JOIN users u ON m.user_id = u.id_user
+                        LEFT JOIN prodi p ON m.id_prodi = p.id_prodi
+                        ORDER BY ba.tanggal_daftar DESC LIMIT 5";
+$resultPendaftarTerbaru = $conn->query($sqlPendaftarTerbaru);
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -27,6 +66,104 @@
             background-color: rgba(255, 255, 255, 0.2);
             border-right: 4px solid white;
             font-weight: 600;
+        }
+        
+        /* Styling for dashboard tables */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        .table th, .table td {
+            padding: 10px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .table th {
+            background-color: #f5f5f5;
+            font-weight: 600;
+        }
+        
+        .table tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-diterima {
+            background-color: #e6f7e6;
+            color: #2e7d32;
+        }
+        
+        .status-ditolak {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        
+        .status-pending {
+            background-color: #fff8e1;
+            color: #ff8f00;
+        }
+        
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+        
+        .stat-card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            font-size: 24px;
+            color: white;
+        }
+        
+        .bg-primary {
+            background-color: #4361ee;
+        }
+        
+        .bg-success {
+            background-color: #2e7d32;
+        }
+        
+        .bg-warning {
+            background-color: #ff9800;
+        }
+        
+        .bg-danger {
+            background-color: #e53935;
+        }
+        
+        .stat-card-info h4 {
+            font-size: 24px;
+            margin: 0 0 5px 0;
+        }
+        
+        .stat-card-info p {
+            margin: 0;
+            color: #666;
         }
     </style>
 </head>
@@ -108,17 +245,26 @@
                         <i class="fas fa-users"></i>
                     </div>
                     <div class="stat-card-info">
-                        <h4>248</h4>
+                        <h4><?php echo $totalPendaftar; ?></h4>
                         <p>Total Pendaftar</p>
                     </div>
                 </div>
                 <div class="card stat-card">
-                    <div class="stat-card-icon bg-warning">
-                        <i class="fas fa-user-check"></i>
+                    <div class="stat-card-icon bg-success">
+                        <i class="fas fa-check-circle"></i>
                     </div>
                     <div class="stat-card-info">
-                        <h4>87</h4>
-                        <p>Penerima Beasiswa</p>
+                        <h4><?php echo $totalDiterima; ?></h4>
+                        <p>Permohonan Diterima</p>
+                    </div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-card-icon bg-danger">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="stat-card-info">
+                        <h4><?php echo $totalDitolak; ?></h4>
+                        <p>Permohonan Ditolak</p>
                     </div>
                 </div>
             </div>
@@ -145,12 +291,56 @@
             <!-- Recent Applications Table -->
             <div class="section-header">
                 <h2 class="section-title">Pendaftar Terbaru</h2>
-                <button class="btn btn-primary btn-sm">
+                <a href="mahasiswa.php" class="btn btn-primary btn-sm">
                     <i class="fas fa-eye"></i> Lihat Semua
-                </button>
+                </a>
             </div>
             <div class="table-container">
-                <!-- Table content will go here -->
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>NIM</th>
+                            <th>Nama</th>
+                            <th>Program Studi</th>
+                            <th>Tanggal Daftar</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($resultPendaftarTerbaru->num_rows > 0) {
+                            while($row = $resultPendaftarTerbaru->fetch_assoc()) {
+                                $statusClass = "";
+                                switch($row["status_keputusan"]) {
+                                    case "diterima":
+                                        $statusClass = "status-diterima";
+                                        break;
+                                    case "ditolak":
+                                        $statusClass = "status-ditolak";
+                                        break;
+                                    default:
+                                        $statusClass = "status-pending";
+                                }
+                                
+                                $statusText = ucfirst($row["status_keputusan"]);
+                                if ($row["status_keputusan"] == "belum diproses") {
+                                    $statusText = "Dalam Proses";
+                                }
+                                
+                                echo "<tr>";
+                                echo "<td>" . $row["nim"] . "</td>";
+                                echo "<td>" . $row["nama"] . "</td>";
+                                echo "<td>" . $row["nama_prodi"] . "</td>";
+                                echo "<td>" . date('d/m/Y', strtotime($row["tanggal_daftar"])) . "</td>";
+                                echo "<td><span class='status-badge " . $statusClass . "'>" . $statusText . "</span></td>";
+                                echo "</tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='5' style='text-align: center;'>Belum ada pendaftar</td></tr>";
+                        }
+                        ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -191,3 +381,7 @@
     </script>
 </body>
 </html>
+<?php
+// Tutup koneksi database
+$conn->close();
+?>
