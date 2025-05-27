@@ -155,7 +155,7 @@ $conn->close();
                 <i class="fas fa-bars"></i>
             </div>
             <div class="user-menu">
-                <img src="logofom.png" alt="User Avatar">
+                <img src="../logo.png" alt="User Avatar">
                 <span>Admin</span>
             </div>
         </div>

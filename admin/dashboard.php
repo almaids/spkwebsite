@@ -227,7 +227,7 @@ $resultPendaftarTerbaru = $conn->query($sqlPendaftarTerbaru);
                 <i class="fas fa-bars"></i>
             </div>
             <div class="user-menu">
-                <img src="/api/placeholder/40/40" alt="User Avatar">
+                <img src="../logo.png" alt="User Avatar">
                 <span>Admin</span>
             </div>
         </div>
@@ -268,26 +268,7 @@ $resultPendaftarTerbaru = $conn->query($sqlPendaftarTerbaru);
                     </div>
                 </div>
             </div>
-
-            <!-- Charts -->
-            <div class="section-header">
-                <h2 class="section-title">Statistik</h2>
-            </div>
-            <div class="charts-container">
-                <div class="chart-card">
-                    <h3 class="chart-title">Distribusi Penerima Beasiswa</h3>
-                    <div class="chart-placeholder">
-                        <div>Grafik Distribusi Penerima Beasiswa per Fakultas</div>
-                    </div>
-                </div>
-                <div class="chart-card">
-                    <h3 class="chart-title">Perbandingan Kriteria</h3>
-                    <div class="chart-placeholder">
-                        <div>Grafik Perbandingan Bobot Kriteria</div>
-                    </div>
-                </div>
-            </div>
-
+            
             <!-- Recent Applications Table -->
             <div class="section-header">
                 <h2 class="section-title">Pendaftar Terbaru</h2>

@@ -184,7 +184,7 @@ $conn->close();
                 </a>
             </li>
             <li class="sidebar-menu-item">
-                <a href="../logout.php">
+                <a href="../index.php">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>Logout</span>
                 </a>
@@ -200,7 +200,7 @@ $conn->close();
                 <i class="fas fa-bars"></i>
             </div>
             <div class="user-menu">
-                <img src="/api/placeholder/40/40" alt="User Avatar">
+                <img src="../logo.png" alt="User Avatar">
                 <span>Admin</span>
             </div>
         </div>
