@@ -299,10 +299,60 @@ class BeasiswaProcessor {
     
     /**
      * Menentukan keputusan untuk aplikasi berdasarkan nilai minimum
-     * FIXED: Perbaikan pemilihan dengan nilai yang lebih realistis
+     * FIXED: Perbaikan logika yang lebih realistis dan fleksibel
      */
     public function determineDecision($nilaiMinimum) {
-        // Ambil aplikasi yang nilai SAW-nya sudah dihitung dan status dokumennya terverifikasi
+        // Hitung statistik nilai SAW terlebih dahulu
+        $sql = "SELECT COUNT(*) as total_eligible, 
+                       AVG(total_nilai) as avg_nilai,
+                       MIN(total_nilai) as min_nilai,
+                       MAX(total_nilai) as max_nilai
+                FROM beasiswa_applications 
+                WHERE status_dokumen = 'terverifikasi' 
+                AND status_keputusan = 'belum diproses'";
+        
+        $result = $this->conn->query($sql);
+        $stats = $result->fetch_assoc();
+        
+        if ($stats['total_eligible'] == 0) {
+            return [
+                'success' => true,
+                'message' => "Tidak ada pendaftar yang perlu diproses."
+            ];
+        }
+        
+        // Jika nilai minimum terlalu tinggi (di atas nilai maksimum), 
+        // gunakan strategi berbasis persentase
+        if ($nilaiMinimum > $stats['max_nilai']) {
+            // Terima 30% pendaftar terbaik, minimal 1 orang
+            $jumlahDiterima = max(1, ceil($stats['total_eligible'] * 0.3));
+            
+            $sql = "UPDATE beasiswa_applications 
+                    SET status_keputusan = 'diterima'
+                    WHERE status_dokumen = 'terverifikasi' 
+                    AND status_keputusan = 'belum diproses'
+                    ORDER BY total_nilai DESC
+                    LIMIT ?";
+            
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("i", $jumlahDiterima);
+            $stmt->execute();
+            $acceptedRows = $stmt->affected_rows;
+            
+            // Tolak sisanya
+            $sql2 = "UPDATE beasiswa_applications 
+                    SET status_keputusan = 'ditolak'
+                    WHERE status_dokumen = 'terverifikasi' 
+                    AND status_keputusan = 'belum diproses'";
+            $this->conn->query($sql2);
+            
+            return [
+                'success' => true,
+                'message' => "Nilai minimum terlalu tinggi. Sistem otomatis menerima $acceptedRows pendaftar terbaik (30% dari total pendaftar)."
+            ];
+        }
+        
+        // Proses normal dengan nilai minimum yang diberikan
         $sql = "UPDATE beasiswa_applications 
                 SET status_keputusan = CASE 
                     WHEN total_nilai >= ? THEN 'diterima' 
@@ -315,68 +365,70 @@ class BeasiswaProcessor {
         $stmt->bind_param("d", $nilaiMinimum);
         
         if ($stmt->execute()) {
-            $affectedRows = $stmt->affected_rows;
+            // Hitung berapa yang diterima dan ditolak
+            $sql_accepted = "SELECT COUNT(*) as accepted FROM beasiswa_applications 
+                            WHERE status_keputusan = 'diterima' 
+                            AND status_dokumen = 'terverifikasi'";
+            $result_accepted = $this->conn->query($sql_accepted);
+            $accepted_count = $result_accepted->fetch_assoc()['accepted'];
             
-            // Pastikan setidaknya ada pendaftar yang diterima jika ada yang eligible
-            if ($affectedRows == 0) {
-                // Jika tidak ada yang terpengaruh, cek apakah nilai minimum terlalu tinggi
-                $sql = "SELECT COUNT(*) as total FROM beasiswa_applications 
-                       WHERE status_dokumen = 'terverifikasi' 
-                       AND status_keputusan = 'belum diproses'";
-                       
-                $result = $this->conn->query($sql);
-                $row = $result->fetch_assoc();
+            // Jika tidak ada yang diterima, terapkan strategi cadangan
+            if ($accepted_count == 0) {
+                // Terima minimal 1 pendaftar dengan nilai tertinggi
+                $sql_backup = "UPDATE beasiswa_applications 
+                              SET status_keputusan = 'diterima'
+                              WHERE status_dokumen = 'terverifikasi' 
+                              AND status_keputusan = 'ditolak'
+                              ORDER BY total_nilai DESC
+                              LIMIT 1";
+                $this->conn->query($sql_backup);
                 
-                if ($row['total'] > 0) {
-                    // Ada pendaftar yang belum diproses, coba kurangi nilai minimum
-                    $newMinimum = $nilaiMinimum * 0.85; // Kurangi 15% dari nilai minimum
-                    
-                    $sql2 = "UPDATE beasiswa_applications 
-                            SET status_keputusan = 'diterima'
-                            WHERE status_dokumen = 'terverifikasi' 
-                            AND status_keputusan = 'belum diproses'
-                            AND total_nilai >= ?
-                            ORDER BY total_nilai DESC
-                            LIMIT 3"; // Setidaknya terima 3 pendaftar teratas
-                    
-                    $stmt2 = $this->conn->prepare($sql2);
-                    $stmt2->bind_param("d", $newMinimum);
-                    $stmt2->execute();
-                    $acceptedRows = $stmt2->affected_rows;
-                    
-                    // Untuk sisanya, tolak
-                    if ($acceptedRows > 0) {
-                        $sql3 = "UPDATE beasiswa_applications 
-                                SET status_keputusan = 'ditolak'
-                                WHERE status_dokumen = 'terverifikasi' 
-                                AND status_keputusan = 'belum diproses'";
-                        $this->conn->query($sql3);
-                        
-                        return [
-                            'success' => true,
-                            'message' => "Keputusan beasiswa berhasil diproses. $acceptedRows pendaftar diterima dengan nilai minimum yang disesuaikan."
-                        ];
-                    }
-                }
+                return [
+                    'success' => true,
+                    'message' => "Nilai minimum terlalu tinggi, tidak ada yang memenuhi kriteria. Sistem otomatis menerima 1 pendaftar dengan nilai tertinggi."
+                ];
             }
             
-            if ($affectedRows > 0) {
-                return [
-                    'success' => true,
-                    'message' => "Keputusan beasiswa berhasil diproses untuk $affectedRows pendaftar."
-                ];
-            } else {
-                return [
-                    'success' => true,
-                    'message' => "Tidak ada pendaftar yang perlu diproses."
-                ];
-            }
+            return [
+                'success' => true,
+                'message' => "Keputusan beasiswa berhasil diproses. $accepted_count pendaftar diterima dengan nilai minimum " . number_format($nilaiMinimum, 4) . "."
+            ];
         } else {
             return [
                 'success' => false,
                 'message' => "Gagal memproses keputusan: " . $stmt->error
             ];
         }
+    }
+
+    /**
+     * Mendapatkan nilai minimum yang disarankan berdasarkan data
+     * FIXED: Saran nilai minimum yang lebih realistis
+     */
+    public function getSuggestedMinimumValue() {
+        $sql = "SELECT COUNT(*) as total_eligible, 
+                       AVG(total_nilai) as avg_nilai,
+                       MIN(total_nilai) as min_nilai,
+                       MAX(total_nilai) as max_nilai
+                FROM beasiswa_applications 
+                WHERE status_dokumen = 'terverifikasi' 
+                AND status_keputusan = 'belum diproses'";
+        
+        $result = $this->conn->query($sql);
+        $stats = $result->fetch_assoc();
+        
+        if ($stats['total_eligible'] == 0) {
+            return 0.6; // Default jika tidak ada data
+        }
+        
+        // Strategi: nilai rata-rata + 10% dari range (max-min)
+        $range = $stats['max_nilai'] - $stats['min_nilai'];
+        $suggested = $stats['avg_nilai'] + ($range * 0.1);
+        
+        // Pastikan tidak melebihi nilai maksimum
+        $suggested = min($suggested, $stats['max_nilai'] * 0.95);
+        
+        return round($suggested, 4);
     }
     
     /**
@@ -492,3 +544,4 @@ class BeasiswaProcessor {
         return $stats;
     }
 }
+?>

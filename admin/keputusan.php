@@ -27,8 +27,10 @@ $ranking = $processor->getRanking();
 // Get highest SAW value
 $highestSAW = $processor->getHighestSAWValue();
 
-// Set default minimum nilai - sedikit di bawah nilai tertinggi (99% dari nilai tertinggi)
-$defaultMinimum = $highestSAW > 0 ? $highestSAW * 0.99 : 0.65;
+$defaultMinimum = $processor->getSuggestedMinimumValue();
+if ($defaultMinimum == 0) {
+    $defaultMinimum = $highestSAW > 0 ? $highestSAW * 0.8 : 0.6; // 80% dari tertinggi, bukan 99%
+}
 
 // Handle recalculation request
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recalculate_saw'])) {

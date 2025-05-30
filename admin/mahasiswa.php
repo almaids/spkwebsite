@@ -214,49 +214,64 @@ $conn->close();
                                         <?php 
                                         $status_dokumen = $pendaftar['status_dokumen'];
                                         $badge_class = '';
+                                        $display_text = '';
                                         
                                         switch ($status_dokumen) {
                                             case 'terverifikasi':
                                                 $badge_class = 'badge-terverifikasi';
+                                                $display_text = 'Terverifikasi';
                                                 break;
                                             case 'ditolak':
                                                 $badge_class = 'badge-ditolak';
+                                                $display_text = 'Ditolak';
                                                 break;
                                             case 'sedang diverifikasi':
                                                 $badge_class = 'badge-sedang-diverifikasi';
+                                                $display_text = 'Sedang Diverifikasi';
+                                                break;
+                                            case 'belum diverifikasi':
+                                                $badge_class = 'badge-belum-lengkap';
+                                                $display_text = 'Belum Diverifikasi';
                                                 break;
                                             case 'belum lengkap':
                                                 $badge_class = 'badge-belum-lengkap';
+                                                $display_text = 'Belum Lengkap';
                                                 break;
                                             default:
                                                 $badge_class = 'badge-belum-lengkap';
+                                                $display_text = 'Belum Diverifikasi';
                                         }
                                         ?>
                                         <span class="badge-status <?php echo $badge_class; ?>">
-                                            <?php echo ucfirst($status_dokumen); ?>
+                                            <?php echo $display_text; ?>
                                         </span>
                                     </td>
                                     <td>
                                         <?php 
                                         $status_keputusan = $pendaftar['status_keputusan'];
                                         $badge_class = '';
+                                        $display_text = '';
                                         
                                         switch ($status_keputusan) {
                                             case 'diterima':
                                                 $badge_class = 'badge-diterima';
+                                                $display_text = 'Diterima';
                                                 break;
                                             case 'ditolak':
                                                 $badge_class = 'badge-ditolak';
+                                                $display_text = 'Ditolak';
                                                 break;
                                             case 'belum diproses':
                                                 $badge_class = 'badge-belum-diproses';
+                                                $display_text = 'Belum Diproses';
                                                 break;
                                             default:
                                                 $badge_class = 'badge-belum-diproses';
+                                                $display_text = 'Belum Diproses';
                                         }
                                         ?>
                                         <span class="badge-status <?php echo $badge_class; ?>">
-                                            <?php echo ucfirst($status_keputusan); ?>
+                                            <?php echo $display_text; ?>
                                         </span>
                                     </td>
                                     <td>

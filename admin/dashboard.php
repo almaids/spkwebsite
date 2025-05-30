@@ -5,7 +5,7 @@ $username = "root";
 $password = "";
 $dbname = "spk";
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($servername, $username, $password, $dbname, 8111);
 
 // Cek koneksi
 if ($conn->connect_error) {
